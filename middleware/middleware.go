@@ -4,7 +4,9 @@ import (
 	"mail-api/common"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/google/uuid"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
@@ -16,6 +18,24 @@ func NewMiddleware(zapLogger *zap.Logger) *middleware {
 	return &middleware{
 		ZapLogger: zapLogger,
 	}
+}
+
+func (m *middleware) BasicAuthenicationMiddleware() fiber.Handler {
+	return basicauth.New(basicauth.Config{
+		Users: map[string]string{
+			viper.GetString("swagger.user"): viper.GetString("swagger.password"),
+		},
+		Realm: "Restricted",
+		Authorizer: func(user, pass string) bool {
+			if user == viper.GetString("swagger.user") && pass == viper.GetString("swagger.password") {
+				return true
+			}
+			return false
+		},
+		Unauthorized:    nil,
+		ContextUsername: "_user",
+		ContextPassword: "_password",
+	})
 }
 
 func (m *middleware) JSONMiddleware() fiber.Handler {

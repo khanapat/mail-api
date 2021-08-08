@@ -18,7 +18,7 @@ func SendEmail(from string, to []string, subject string, body string, isAuth boo
 
 	var dialer *gomail.Dialer
 	if isAuth {
-		dialer = gomail.NewDialer(viper.GetString("mail.smtp-host"), viper.GetInt("mail.smtp-port"), viper.GetString("mail.username"), os.Getenv("EMAIL_APIKEY"))
+		dialer = gomail.NewDialer(viper.GetString("mail.smtp-host"), viper.GetInt("mail.smtp-port"), from, os.Getenv("EMAIL_APIKEY"))
 	} else {
 		dialer = &gomail.Dialer{
 			Host: viper.GetString("mail.smtp-host"),

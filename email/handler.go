@@ -16,6 +16,17 @@ func NewMailHandler() *mailhandler {
 	return &mailhandler{}
 }
 
+// SendVerifyEmail
+// @Summary Send Verify Email
+// @Description send token to verify email
+// @Tags Email
+// @Accept json
+// @Produce json
+// @Param SendVerifyEmail body email.SendVerifyEmailRequest true "request body to send verify email"
+// @Success 200 {object} response.Response "Success"
+// @Failure 400 {object} response.ErrResponse "Bad Request"
+// @Failure 500 {object} response.ErrResponse "Internal Server Error"
+// @Router /verification [post]
 func (s *mailhandler) SendVerifyEmail(c *handler.Ctx) error {
 	var req SendVerifyEmailRequest
 	if err := c.BodyParser(&req); err != nil {
@@ -51,6 +62,17 @@ func (s *mailhandler) SendVerifyEmail(c *handler.Ctx) error {
 	return c.Status(http.StatusOK).JSON(response.NewResponse(response.ResponseContextLocale(c.Context()).SendMailSuccess, nil))
 }
 
+// SendOTP
+// @Summary Send OTP
+// @Description send otp to email
+// @Tags Email
+// @Accept json
+// @Produce json
+// @Param SendOTP body email.SendOtpRequest true "request body to send otp"
+// @Success 200 {object} response.Response "Success"
+// @Failure 400 {object} response.ErrResponse "Bad Request"
+// @Failure 500 {object} response.ErrResponse "Internal Server Error"
+// @Router /otp [post]
 func (s *mailhandler) SendOtp(c *handler.Ctx) error {
 	var req SendOtpRequest
 	if err := c.BodyParser(&req); err != nil {
@@ -88,6 +110,17 @@ func (s *mailhandler) SendOtp(c *handler.Ctx) error {
 	return c.Status(http.StatusOK).JSON(response.NewResponse(response.ResponseContextLocale(c.Context()).SendMailSuccess, nil))
 }
 
+// SendMarginCall
+// @Summary Send Warning Margin Call
+// @Description send warning margin call
+// @Tags Email
+// @Accept json
+// @Produce json
+// @Param SendMarginCall body email.SendMarginCallRequest true "request body to send warning margin call"
+// @Success 200 {object} response.Response "Success"
+// @Failure 400 {object} response.ErrResponse "Bad Request"
+// @Failure 500 {object} response.ErrResponse "Internal Server Error"
+// @Router /margin-call [post]
 func (s *mailhandler) SendMarginCall(c *handler.Ctx) error {
 	var req SendMarginCallRequest
 	if err := c.BodyParser(&req); err != nil {

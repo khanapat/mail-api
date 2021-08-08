@@ -1,0 +1,344 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Mail API for ICFIN company.",
+        "title": "Mail API Services",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "K.Apiwattanawong",
+            "url": "http://www.swagger.io/support",
+            "email": "k.apiwattanawong@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:9090",
+    "basePath": "/email",
+    "paths": {
+        "/margin-call": {
+            "post": {
+                "description": "send warning margin call",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Email"
+                ],
+                "summary": "Send Warning Margin Call",
+                "parameters": [
+                    {
+                        "description": "request body to send warning margin call",
+                        "name": "SendMarginCall",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/email.SendMarginCallRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/otp": {
+            "post": {
+                "description": "send otp to email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Email"
+                ],
+                "summary": "Send OTP",
+                "parameters": [
+                    {
+                        "description": "request body to send otp",
+                        "name": "SendOTP",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/email.SendOtpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/verification": {
+            "post": {
+                "description": "send token to verify email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Email"
+                ],
+                "summary": "Send Verify Email",
+                "parameters": [
+                    {
+                        "description": "request body to send verify email",
+                        "name": "SendVerifyEmail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/email.SendVerifyEmailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "email.BodyMarginCallRequest": {
+            "type": "object",
+            "properties": {
+                "marginCallCount": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "trust momo"
+                }
+            }
+        },
+        "email.BodySendOtpRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "trust"
+                },
+                "otp": {
+                    "type": "string",
+                    "example": "999999"
+                },
+                "refNo": {
+                    "type": "string",
+                    "example": "tog2C7"
+                }
+            }
+        },
+        "email.BodySendVerifyEmailRequest": {
+            "type": "object",
+            "properties": {
+                "link": {
+                    "type": "string",
+                    "example": "www.lending.com/WERaOJOsfX"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "trust momo"
+                }
+            }
+        },
+        "email.SendMarginCallRequest": {
+            "type": "object",
+            "properties": {
+                "auth": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "body": {
+                    "$ref": "#/definitions/email.BodyMarginCallRequest"
+                },
+                "from": {
+                    "type": "string",
+                    "example": "icfin999@gmail.com"
+                },
+                "subject": {
+                    "type": "string",
+                    "example": "margin call"
+                },
+                "template": {
+                    "type": "string",
+                    "example": "margin-call.html"
+                },
+                "to": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "yoisak09446@gmail.com"
+                    ]
+                }
+            }
+        },
+        "email.SendOtpRequest": {
+            "type": "object",
+            "properties": {
+                "auth": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "body": {
+                    "$ref": "#/definitions/email.BodySendOtpRequest"
+                },
+                "from": {
+                    "type": "string",
+                    "example": "icfin999@gmail.com"
+                },
+                "subject": {
+                    "type": "string",
+                    "example": "otp request"
+                },
+                "template": {
+                    "type": "string",
+                    "example": "otp.html"
+                },
+                "to": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "yoisak09446@gmail.com"
+                    ]
+                }
+            }
+        },
+        "email.SendVerifyEmailRequest": {
+            "type": "object",
+            "properties": {
+                "auth": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "body": {
+                    "$ref": "#/definitions/email.BodySendVerifyEmailRequest"
+                },
+                "from": {
+                    "type": "string",
+                    "example": "icfin999@gmail.com"
+                },
+                "subject": {
+                    "type": "string",
+                    "example": "otp request"
+                },
+                "template": {
+                    "type": "string",
+                    "example": "otp.html"
+                },
+                "to": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "yoisak09446@gmail.com"
+                    ]
+                }
+            }
+        },
+        "response.ErrResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 400
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Please contact administrator for more information."
+                },
+                "error": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Cannot register public key."
+                }
+            }
+        },
+        "response.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 200
+                },
+                "data": {
+                    "type": "object"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Register key success."
+                }
+            }
+        }
+    }
+}

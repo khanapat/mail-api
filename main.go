@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"mail-api/docs"
 	"mail-api/email"
 	"mail-api/internal/handler"
 	"mail-api/logz"
@@ -18,6 +19,7 @@ import (
 
 	_ "time/tzdata"
 
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
@@ -31,6 +33,18 @@ func init() {
 	initViper()
 }
 
+// @title Mail API Services
+// @version 1.0
+// @description Mail API for ICFIN company.
+// @termsOfService http://swagger.io/terms/
+// @contact.name K.Apiwattanawong
+// @contact.url http://www.swagger.io/support
+// @contact.email k.apiwattanawong@gmail.com
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host localhost:9090
+// @BasePath /email
+// @schemes http https
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -52,6 +66,10 @@ func main() {
 	}
 
 	middle := middleware.NewMiddleware(logger)
+
+	swag := app.Group("/swagger")
+	swag.Use(middle.BasicAuthenicationMiddleware())
+	registerSwaggerRoute(swag)
 
 	e := app.Group(viper.GetString("app.context"))
 
@@ -104,10 +122,13 @@ func initViper() {
 	viper.SetDefault("app.timeout", "60s")
 	viper.SetDefault("app.context", "/email")
 
+	viper.SetDefault("swagger.host", "localhost:8080")
+	viper.SetDefault("swagger.user", "admin")
+	viper.SetDefault("swagger.password", "password")
+
 	viper.SetDefault("log.level", "debug")
 	viper.SetDefault("log.env", "dev")
 
-	viper.SetDefault("mail.username", "icfin999@gmail.com")
 	viper.SetDefault("mail.smtp-host", "smtp.gmail.com")
 	viper.SetDefault("mail.smtp-port", "587")
 
@@ -121,4 +142,13 @@ func initTimezone() {
 		log.Printf("error loading location 'Asia/Bangkok': %v\n", err)
 	}
 	time.Local = ict
+}
+
+func registerSwaggerRoute(swag fiber.Router) {
+	swag.Get("/*", swagger.New(swagger.Config{
+		URL:         fmt.Sprintf("http://%s/swagger/doc.json", viper.GetString("swagger.host")),
+		DeepLinking: false,
+	}))
+	docs.SwaggerInfo.Host = viper.GetString("swagger.host")
+	docs.SwaggerInfo.BasePath = viper.GetString("app.context")
 }

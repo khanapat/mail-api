@@ -1,0 +1,234 @@
+basePath: /email
+definitions:
+  email.BodyMarginCallRequest:
+    properties:
+      marginCallCount:
+        example: 1
+        type: integer
+      name:
+        example: trust momo
+        type: string
+    type: object
+  email.BodySendOtpRequest:
+    properties:
+      name:
+        example: trust
+        type: string
+      otp:
+        example: "999999"
+        type: string
+      refNo:
+        example: tog2C7
+        type: string
+    type: object
+  email.BodySendVerifyEmailRequest:
+    properties:
+      link:
+        example: www.lending.com/WERaOJOsfX
+        type: string
+      name:
+        example: trust momo
+        type: string
+    type: object
+  email.SendMarginCallRequest:
+    properties:
+      auth:
+        example: true
+        type: boolean
+      body:
+        $ref: '#/definitions/email.BodyMarginCallRequest'
+      from:
+        example: icfin999@gmail.com
+        type: string
+      subject:
+        example: margin call
+        type: string
+      template:
+        example: margin-call.html
+        type: string
+      to:
+        example:
+        - yoisak09446@gmail.com
+        items:
+          type: string
+        type: array
+    type: object
+  email.SendOtpRequest:
+    properties:
+      auth:
+        example: true
+        type: boolean
+      body:
+        $ref: '#/definitions/email.BodySendOtpRequest'
+      from:
+        example: icfin999@gmail.com
+        type: string
+      subject:
+        example: otp request
+        type: string
+      template:
+        example: otp.html
+        type: string
+      to:
+        example:
+        - yoisak09446@gmail.com
+        items:
+          type: string
+        type: array
+    type: object
+  email.SendVerifyEmailRequest:
+    properties:
+      auth:
+        example: true
+        type: boolean
+      body:
+        $ref: '#/definitions/email.BodySendVerifyEmailRequest'
+      from:
+        example: icfin999@gmail.com
+        type: string
+      subject:
+        example: otp request
+        type: string
+      template:
+        example: otp.html
+        type: string
+      to:
+        example:
+        - yoisak09446@gmail.com
+        items:
+          type: string
+        type: array
+    type: object
+  response.ErrResponse:
+    properties:
+      code:
+        example: 400
+        type: integer
+      description:
+        example: Please contact administrator for more information.
+        type: string
+      error:
+        type: string
+      title:
+        example: Cannot register public key.
+        type: string
+    type: object
+  response.Response:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        type: object
+      title:
+        example: Register key success.
+        type: string
+    type: object
+host: localhost:9090
+info:
+  contact:
+    email: k.apiwattanawong@gmail.com
+    name: K.Apiwattanawong
+    url: http://www.swagger.io/support
+  description: Mail API for ICFIN company.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Mail API Services
+  version: "1.0"
+paths:
+  /margin-call:
+    post:
+      consumes:
+      - application/json
+      description: send warning margin call
+      parameters:
+      - description: request body to send warning margin call
+        in: body
+        name: SendMarginCall
+        required: true
+        schema:
+          $ref: '#/definitions/email.SendMarginCallRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrResponse'
+      summary: Send Warning Margin Call
+      tags:
+      - Email
+  /otp:
+    post:
+      consumes:
+      - application/json
+      description: send otp to email
+      parameters:
+      - description: request body to send otp
+        in: body
+        name: SendOTP
+        required: true
+        schema:
+          $ref: '#/definitions/email.SendOtpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrResponse'
+      summary: Send OTP
+      tags:
+      - Email
+  /verification:
+    post:
+      consumes:
+      - application/json
+      description: send token to verify email
+      parameters:
+      - description: request body to send verify email
+        in: body
+        name: SendVerifyEmail
+        required: true
+        schema:
+          $ref: '#/definitions/email.SendVerifyEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrResponse'
+      summary: Send Verify Email
+      tags:
+      - Email
+schemes:
+- http
+- https
+swagger: "2.0"

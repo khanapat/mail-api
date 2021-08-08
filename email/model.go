@@ -9,8 +9,8 @@ import (
 )
 
 type SendOtpRequest struct {
-	From     string             `json:"from" example:"k.apiwattanawong@gmail.com"`
-	To       []string           `json:"to" example:"[yoisak4@gmail.com]"`
+	From     string             `json:"from" example:"icfin999@gmail.com"`
+	To       []string           `json:"to" example:"yoisak09446@gmail.com"`
 	Subject  string             `json:"subject" example:"otp request"`
 	Template string             `json:"template" example:"otp.html"`
 	Body     BodySendOtpRequest `json:"body"`
@@ -49,8 +49,8 @@ func (req *SendOtpRequest) validate() error {
 }
 
 type SendVerifyEmailRequest struct {
-	From     string                     `json:"from" example:"k.apiwattanawong@gmail.com"`
-	To       []string                   `json:"to" example:"[yoisak4@gmail.com]"`
+	From     string                     `json:"from" example:"icfin999@gmail.com"`
+	To       []string                   `json:"to" example:"yoisak09446@gmail.com"`
 	Subject  string                     `json:"subject" example:"otp request"`
 	Template string                     `json:"template" example:"otp.html"`
 	Body     BodySendVerifyEmailRequest `json:"body"`
@@ -85,8 +85,8 @@ func (req *SendVerifyEmailRequest) validate() error {
 }
 
 type SendMarginCallRequest struct {
-	From     string                `json:"from" example:"k.apiwattanawong@gmail.com"`
-	To       []string              `json:"to" example:"[yoisak4@gmail.com]"`
+	From     string                `json:"from" example:"icfin999@gmail.com"`
+	To       []string              `json:"to" example:"yoisak09446@gmail.com"`
 	Subject  string                `json:"subject" example:"margin call"`
 	Template string                `json:"template" example:"margin-call.html"`
 	Body     BodyMarginCallRequest `json:"body"`
