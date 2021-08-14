@@ -1,5 +1,20 @@
 basePath: /email
 definitions:
+  email.BodyLiquidateFundRequest:
+    properties:
+      btcAmount:
+        example: 0.5
+        type: number
+      contractId:
+        example: 1
+        type: integer
+      ethAmount:
+        example: 0.5
+        type: number
+      name:
+        example: trust momo
+        type: string
+    type: object
   email.BodyMarginCallRequest:
     properties:
       marginCallCount:
@@ -29,6 +44,29 @@ definitions:
       name:
         example: trust momo
         type: string
+    type: object
+  email.SendLiquidateFundRequest:
+    properties:
+      auth:
+        example: true
+        type: boolean
+      body:
+        $ref: '#/definitions/email.BodyLiquidateFundRequest'
+      from:
+        example: icfin999@gmail.com
+        type: string
+      subject:
+        example: margin call
+        type: string
+      template:
+        example: margin-call.html
+        type: string
+      to:
+        example:
+        - yoisak09446@gmail.com
+        items:
+          type: string
+        type: array
     type: object
   email.SendMarginCallRequest:
     properties:
@@ -138,6 +176,36 @@ info:
   title: Mail API Services
   version: "1.0"
 paths:
+  /liquidation:
+    post:
+      consumes:
+      - application/json
+      description: send liquidate fund
+      parameters:
+      - description: request body to send liquidate fund
+        in: body
+        name: SendLiquidateFund
+        required: true
+        schema:
+          $ref: '#/definitions/email.SendLiquidateFundRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrResponse'
+      summary: Send Liquidate Fund
+      tags:
+      - Email
   /margin-call:
     post:
       consumes:

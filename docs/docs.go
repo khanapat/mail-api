@@ -33,6 +33,52 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/liquidation": {
+            "post": {
+                "description": "send liquidate fund",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Email"
+                ],
+                "summary": "Send Liquidate Fund",
+                "parameters": [
+                    {
+                        "description": "request body to send liquidate fund",
+                        "name": "SendLiquidateFund",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/email.SendLiquidateFundRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/margin-call": {
             "post": {
                 "description": "send warning margin call",
@@ -173,6 +219,27 @@ var doc = `{
         }
     },
     "definitions": {
+        "email.BodyLiquidateFundRequest": {
+            "type": "object",
+            "properties": {
+                "btcAmount": {
+                    "type": "number",
+                    "example": 0.5
+                },
+                "contractId": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "ethAmount": {
+                    "type": "number",
+                    "example": 0.5
+                },
+                "name": {
+                    "type": "string",
+                    "example": "trust momo"
+                }
+            }
+        },
         "email.BodyMarginCallRequest": {
             "type": "object",
             "properties": {
@@ -213,6 +280,39 @@ var doc = `{
                 "name": {
                     "type": "string",
                     "example": "trust momo"
+                }
+            }
+        },
+        "email.SendLiquidateFundRequest": {
+            "type": "object",
+            "properties": {
+                "auth": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "body": {
+                    "$ref": "#/definitions/email.BodyLiquidateFundRequest"
+                },
+                "from": {
+                    "type": "string",
+                    "example": "icfin999@gmail.com"
+                },
+                "subject": {
+                    "type": "string",
+                    "example": "margin call"
+                },
+                "template": {
+                    "type": "string",
+                    "example": "margin-call.html"
+                },
+                "to": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "yoisak09446@gmail.com"
+                    ]
                 }
             }
         },
