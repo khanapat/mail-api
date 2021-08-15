@@ -183,3 +183,40 @@ func (s *mailhandler) SendLiquidateFund(c *handler.Ctx) error {
 	c.Log().Info(fmt.Sprintf("Send liquidate fund to %s success.", req.To))
 	return c.Status(http.StatusOK).JSON(response.NewResponse(response.ResponseContextLocale(c.Context()).SendMailSuccess, nil))
 }
+
+// SendSubscription
+// @Summary Send Subscription
+// @Description send subscription
+// @Tags Email
+// @Accept json
+// @Produce json
+// @Param SendSubscription body email.SendSubscriptionRequest true "request body to send subscription"
+// @Success 200 {object} response.Response "Success"
+// @Failure 400 {object} response.ErrResponse "Bad Request"
+// @Failure 500 {object} response.ErrResponse "Internal Server Error"
+// @Router /subscription [post]
+func (s *mailhandler) SendSubscription(c *handler.Ctx) error {
+	var req SendSubscriptionRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(response.NewErrResponse(response.ResponseContextLocale(c.Context()).SendMailValidateReq, err.Error()))
+	}
+	if err := req.validate(); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(response.NewErrResponse(response.ResponseContextLocale(c.Context()).SendMailValidateReq, err.Error()))
+	}
+
+	t, err := template.ParseFiles(fmt.Sprintf("./template/%s", req.Template))
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(response.NewErrResponse(response.ResponseContextLocale(c.Context()).SendMailTemplateNoMatch, err.Error()))
+	}
+	buf := new(bytes.Buffer)
+	if err := t.Execute(buf, req.Body); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(response.NewErrResponse(response.ResponseContextLocale(c.Context()).SendMailTemplateNoMatch, err.Error()))
+	}
+
+	if err := SendEmail(req.From, req.To, req.Subject, buf.String(), req.Auth); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(response.NewErrResponse(response.ResponseContextLocale(c.Context()).SendMailSmtpFail, err.Error()))
+	}
+
+	c.Log().Info(fmt.Sprintf("Send Subscription to %s success.", req.To))
+	return c.Status(http.StatusOK).JSON(response.NewResponse(response.ResponseContextLocale(c.Context()).SendMailSuccess, nil))
+}

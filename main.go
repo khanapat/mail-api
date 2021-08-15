@@ -83,6 +83,7 @@ func main() {
 	e.Post("/otp", handler.Helper(emailHandler.SendOtp, logger))
 	e.Post("/margin-call", handler.Helper(emailHandler.SendMarginCall, logger))
 	e.Post("/liquidation", handler.Helper(emailHandler.SendLiquidateFund, logger))
+	e.Post("/subscription", handler.Helper(emailHandler.SendSubscription, logger))
 
 	app.Get("/version", version.VersionHandler)
 	app.Get("/liveness", func(c *fiber.Ctx) error { return c.Status(http.StatusOK).SendString("Live!") })

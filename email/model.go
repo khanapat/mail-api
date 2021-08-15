@@ -163,3 +163,39 @@ func (req *SendLiquidateFundRequest) validate() error {
 	}
 	return nil
 }
+
+type SendSubscriptionRequest struct {
+	From     string           `json:"from" example:"icfin999@gmail.com"`
+	To       []string         `json:"to" example:"yoisak09446@gmail.com"`
+	Subject  string           `json:"subject" example:"margin call"`
+	Template string           `json:"template" example:"margin-call.html"`
+	Body     SubscriptionBody `json:"body"`
+	Auth     bool             `json:"auth" example:"true"`
+}
+
+type SubscriptionBody struct {
+	Name  string `json:"name" example:"trust momo"`
+	Phone string `json:"phone" example:"022222222"`
+}
+
+func (req *SendSubscriptionRequest) validate() error {
+	if utf8.RuneCountInString(req.From) == 0 {
+		return errors.Wrapf(errors.New(fmt.Sprintf("'from' must be REQUIRED field but the input is '%v'", req.From)), response.ValidateFieldError)
+	}
+	if len(req.To) == 0 {
+		return errors.Wrapf(errors.New(fmt.Sprintf("'to' must be REQUIRED field but the input is '%v'", req.To)), response.ValidateFieldError)
+	}
+	if utf8.RuneCountInString(req.Subject) == 0 {
+		return errors.Wrapf(errors.New(fmt.Sprintf("'subject' must be REQUIRED field but the input is '%v'", req.Subject)), response.ValidateFieldError)
+	}
+	if utf8.RuneCountInString(req.Template) == 0 {
+		return errors.Wrapf(errors.New(fmt.Sprintf("'template' must be REQUIRED field but the input is '%v'", req.Template)), response.ValidateFieldError)
+	}
+	if utf8.RuneCountInString(req.Body.Name) == 0 {
+		return errors.Wrapf(errors.New(fmt.Sprintf("'name' must be REQUIRED field but the input is '%v'", req.Body.Name)), response.ValidateFieldError)
+	}
+	if utf8.RuneCountInString(req.Body.Phone) == 0 {
+		return errors.Wrapf(errors.New(fmt.Sprintf("'phone' must be REQUIRED field but the input is '%v'", req.Body.Phone)), response.ValidateFieldError)
+	}
+	return nil
+}
